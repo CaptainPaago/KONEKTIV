@@ -1,6 +1,16 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import AuthTest from './components/AuthTest';
+
+function App() {
+  return (
+    <div>
+      <h1>KONEKTIV Setup Test</h1>
+      <AuthTest />
+    </div>
+  );
+}
 
 function App() {
   return (
