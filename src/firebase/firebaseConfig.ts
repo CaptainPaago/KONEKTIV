@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 
 // TODO: Replace with your Firebase config
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -23,3 +24,18 @@ export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 export const db = getFirestore(app);
 export const storage = getStorage(app);
+export const handleNewUser = async (user: User) => {
+  const userRef = doc(db, "users", user.uid);
+  const docSnap = await getDoc(userRef);
+
+  if (!docSnap.exists()) {
+    await setDoc(userRef, {
+      email: user.email,
+      type: "individual", // Default type
+      profile: { name: user.displayName || "" },
+      subscription: { tier: "free", expiry: new Date() },
+      kycStatus: "pending",
+      verified: false
+    });
+  }
+};
