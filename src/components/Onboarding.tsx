@@ -6,7 +6,7 @@ export default function Onboarding() {
 
   const handleSubmit = async () => {
     if (!auth.currentUser) return;
-    
+
     await updateDoc(doc(db, "users", auth.currentUser.uid), {
       type: userType,
     });
