@@ -1,34 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { auth } from './firebase/firebaseConfig';
+import { onAuthStateChanged } from 'firebase/auth';
 import AuthTest from './components/AuthTest';
+import { useEffect, useState } from 'react';
 
 function App() {
+  const [userEmail, setUserEmail] = useState<string | null>(null);
+
+  // Monitor authentication state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUserEmail(user?.email || null);
+    });
+    return unsubscribe; // Cleanup on unmount
+  }, []);
+
   return (
-    <div>
+    <div style={{ padding: '2rem', textAlign: 'center' }}>
       <h1>KONEKTIV Setup Test</h1>
+      <p>
+        {userEmail 
+          ? `Logged in as: ${userEmail}` 
+          : "Not logged in"}
+      </p>
       <AuthTest />
-    </div>
-  );
-}
-
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }
